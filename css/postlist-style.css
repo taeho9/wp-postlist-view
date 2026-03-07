@@ -1,0 +1,175 @@
+/* 기본 래퍼 및 아이템 스타일 */
+.plv-wrapper {
+    margin-bottom: 30px;
+    box-sizing: border-box;
+}
+.plv-wrapper * {
+    box-sizing: inherit;
+}
+.plv-item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.plv-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.plv-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.plv-title {
+    margin: 0 0 10px 0;
+    font-size: var(--plv-title-size, 1.25rem);
+    font-weight: var(--plv-title-weight, bold);
+    line-height: 1.4;
+}
+.plv-title a {
+    text-decoration: none;
+    color: var(--plv-title-color, #1a202c);
+    box-shadow: none;
+}
+.plv-title a:hover {
+    color: #3182ce;
+}
+.plv-meta {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+.plv-meta-sep {
+    margin: 0 6px;
+    color: #cbd5e0;
+}
+.plv-category {
+    font-weight: 500;
+    color: #4a5568;
+}
+.plv-excerpt {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* 1. 바둑판(카드) 스타일 (.plv-style-grid) */
+.plv-wrapper.plv-style-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--plv-thumb-size, 200px));
+    gap: 24px;
+    justify-content: center;
+}
+.plv-wrapper.plv-style-grid .plv-item {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: var(--plv-thumb-size, 200px);
+}
+.plv-wrapper.plv-style-grid .plv-thumb {
+    position: relative;
+    width: var(--plv-thumb-size, 200px);
+    height: var(--plv-thumb-size, 200px);
+    overflow: hidden;
+}
+.plv-wrapper.plv-style-grid .plv-thumb a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.plv-wrapper.plv-style-grid .plv-content {
+    padding: 20px;
+    width: var(--plv-thumb-size, 200px);
+    height: var(--plv-thumb-size, 200px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. 리스트 스타일 (.plv-style-list) */
+.plv-wrapper.plv-style-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.plv-wrapper.plv-style-list .plv-item {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin-bottom: 0;
+}
+.plv-wrapper.plv-style-list .plv-thumb {
+    width: var(--plv-thumb-size, 200px);
+    height: var(--plv-thumb-size, 200px);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.plv-wrapper.plv-style-list .plv-thumb a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.plv-wrapper.plv-style-list .plv-content {
+    padding: 24px;
+    flex-grow: 1;
+    height: var(--plv-thumb-size, 200px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 썸네일 둥근 모서리 옵션 */
+.plv-wrapper.plv-radius-xs .plv-thumb { border-radius: 4px; }
+.plv-wrapper.plv-radius-sm .plv-thumb { border-radius: 8px; }
+.plv-wrapper.plv-radius-md .plv-thumb { border-radius: 12px; }
+.plv-wrapper.plv-radius-lg .plv-thumb { border-radius: 16px; }
+
+/* 모바일 반응형 대응 */
+@media (max-width: 768px) {
+    .plv-wrapper.plv-style-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
+    .plv-wrapper.plv-style-grid .plv-item,
+    .plv-wrapper.plv-style-grid .plv-thumb,
+    .plv-wrapper.plv-style-grid .plv-content {
+        width: 100%;
+        height: auto;
+    }
+    .plv-wrapper.plv-style-grid .plv-thumb {
+        padding-top: 100%;
+    }
+
+    .plv-wrapper.plv-style-list .plv-item {
+        flex-direction: column;
+        width: 100%;
+    }
+    .plv-wrapper.plv-style-list .plv-thumb {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-top: 100%; /* 모바일에서도 1:1 비율 유지 */
+        max-width: none;
+    }
+    .plv-wrapper.plv-style-list .plv-thumb a {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .plv-wrapper.plv-style-list .plv-content {
+        width: 100%;
+        height: auto;
+    }
+}
