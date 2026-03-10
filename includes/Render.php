@@ -63,6 +63,7 @@ class Render {
         $thumb_size = get_post_meta( $view_id, '_plv_thumb_size', true ) ?: '200';
         $show_category = get_post_meta( $view_id, '_plv_show_category', true ) ?: 'no';
         $show_date = get_post_meta( $view_id, '_plv_show_date', true ) ?: 'no';
+        $show_pagination = get_post_meta( $view_id, '_plv_show_pagination', true ) ?: 'no';
         $seo_plugin = get_post_meta( $view_id, '_plv_seo_plugin', true ) ?: 'slim_seo';
         $disable_responsive = get_post_meta( $view_id, '_plv_disable_responsive', true ) ?: 'no';
         $thumb_radius = get_post_meta( $view_id, '_plv_thumb_radius', true ) ?: 'md';
@@ -80,6 +81,14 @@ class Render {
         // 0이 아닌 경우(특정 카테고리 선택) 카테고리 파라미터 추가
         if ( $category !== '0' ) {
             $args['cat'] = absint( $category );
+        }
+
+        // 페이징 처리
+        $page_key = 'plv_page_' . $view_id;
+        $paged = 1;
+        if ( $show_pagination === 'yes' ) {
+            $paged = isset( $_GET[ $page_key ] ) ? max( 1, absint( $_GET[ $page_key ] ) ) : 1;
+            $args['paged'] = $paged;
         }
 
         $query = new WP_Query( $args );
@@ -107,7 +116,7 @@ class Render {
                         
                         if ( empty( $img_url ) ) {
                             // Placeholder Image
-                            $img_url = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjMyIiBmaWxsPSIjY2VkNGRhIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+';
+                            $img_url = PLV_PLUGIN_URL . 'images/loading.jpg';
                         }
                         $img_html = '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( get_the_title() ) . '">';
                     }
@@ -177,6 +186,24 @@ class Render {
                     </div>
                 <?php endwhile; ?>
                 <?php wp_reset_postdata(); ?>
+
+                <?php
+                if ( $show_pagination === 'yes' ) {
+                    $total_pages = $query->max_num_pages;
+                    if ( $total_pages > 1 ) {
+                        echo '<div class="plv-pagination">';
+                        echo paginate_links( [
+                            'base'      => add_query_arg( $page_key, '%#%' ),
+                            'format'    => '',
+                            'current'   => $paged,
+                            'total'     => $total_pages,
+                            'prev_text' => '&laquo; 이전',
+                            'next_text' => '다음 &raquo;',
+                        ] );
+                        echo '</div>';
+                    }
+                }
+                ?>
             <?php else : ?>
                 <p><?php esc_html_e( '게시물이 없습니다.', 'wp-postlist-view' ); ?></p>
             <?php endif; ?>

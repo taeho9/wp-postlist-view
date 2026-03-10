@@ -82,6 +82,7 @@ class Admin {
         $seo_plugin = get_post_meta( $post->ID, '_plv_seo_plugin', true ) ?: 'slim_seo';
         $show_category = get_post_meta( $post->ID, '_plv_show_category', true ) ?: 'no';
         $show_date = get_post_meta( $post->ID, '_plv_show_date', true ) ?: 'no';
+        $show_pagination = get_post_meta( $post->ID, '_plv_show_pagination', true ) ?: 'no';
         $disable_responsive = get_post_meta( $post->ID, '_plv_disable_responsive', true ) ?: 'no';
         $thumb_radius = get_post_meta( $post->ID, '_plv_thumb_radius', true ) ?: 'md';
         $title_size = get_post_meta( $post->ID, '_plv_title_size', true ) ?: '1.25rem';
@@ -191,6 +192,11 @@ class Admin {
                     </label>
                     <br>
                     <label>
+                        <input type="checkbox" name="plv_show_pagination" value="yes" <?php checked( $show_pagination, 'yes' ); ?> />
+                        페이징(Pagination) 표시
+                    </label>
+                    <br>
+                    <label>
                         <input type="checkbox" name="plv_disable_responsive" value="yes" <?php checked( $disable_responsive, 'yes' ); ?> />
                         워드프레스 반응형 이미지 비활성화 (썸네일이 흐릿하게 보일 경우 체크하여 선명도 유지)
                     </label>
@@ -251,6 +257,9 @@ class Admin {
 
         $show_date = isset( $_POST['plv_show_date'] ) && $_POST['plv_show_date'] === 'yes' ? 'yes' : 'no';
         update_post_meta( $post_id, '_plv_show_date', $show_date );
+
+        $show_pagination = isset( $_POST['plv_show_pagination'] ) && $_POST['plv_show_pagination'] === 'yes' ? 'yes' : 'no';
+        update_post_meta( $post_id, '_plv_show_pagination', $show_pagination );
 
         $disable_responsive = isset( $_POST['plv_disable_responsive'] ) && $_POST['plv_disable_responsive'] === 'yes' ? 'yes' : 'no';
         update_post_meta( $post_id, '_plv_disable_responsive', $disable_responsive );
